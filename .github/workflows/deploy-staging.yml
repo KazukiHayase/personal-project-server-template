@@ -1,0 +1,16 @@
+# TODO: project_id追加, コメントアウト解除
+# name: Deploy Staging
+#
+# on:
+#   push:
+#     branches:
+#       - develop
+#   workflow_dispatch:
+#
+# jobs:
+#   call-deploy:
+#     uses: KazukiHayase/batsugame-server/.github/workflows/deploy-base.yml@main
+#     with:
+#       project_id: 
+#     secrets:
+#       credential: ${{ secrets.GCP_SA_KEY_STG }}

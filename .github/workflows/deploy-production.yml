@@ -1,0 +1,16 @@
+# TODO: project_id追加, コメントアウト解除
+# name: Deploy Production
+#
+# on:
+#   push:
+#     branches:
+#       - main
+#   workflow_dispatch:
+#
+# jobs:
+#   call-deploy:
+#     uses: KazukiHayase/server-template/.github/workflows/deploy-base.yml@main
+#     with:
+#       project_id: 
+#     secrets:
+#       credential: ${{ secrets.GCP_SA_KEY_PROD }}

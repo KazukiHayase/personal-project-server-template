@@ -1,0 +1,44 @@
+name: Deploy Base
+
+on:
+  workflow_call:
+    inputs:
+      project_id:
+        required: true
+        type: string
+    secrets:
+      credential:
+        required: true
+
+env:
+  IMAGE: asia-northeast1-docker.pkg.dev/${{ inputs.project_id }}/docker/server:latest
+
+jobs:
+  deploy:
+    name: Deploy Staging
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: GCP Authenticate
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: '${{ secrets.credential }}'
+
+      - name: Configure docker to use the gcloud cli
+        run: gcloud auth configure-docker asia-northeast1-docker.pkg.dev --quiet
+
+      - name: Build the docker image
+        run: docker build . -t $IMAGE -f ./Dockerfile.production
+
+      - name: Push the docker image
+        run: docker push $IMAGE
+
+      - name: Deploy to Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v0
+        with:
+          service: server
+          image: ${{ env.IMAGE }}
+          region: asia-northeast1
+

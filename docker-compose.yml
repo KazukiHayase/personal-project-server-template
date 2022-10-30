@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    tty: true
+    command: air -c .air.toml
+    ports:
+      - "8888:8080"
+    volumes:
+      - type: bind
+        source: ./
+        target: /go/src
+      - type: volume
+        source: modules
+        target: /go/pkg/mod
+      - ./key.json:/key.json:ro
+    environment:
+      ENV: local
+      TZ: Asia/Tokyo
+      GCP_PROJECT_ID: "${GCP_PROJECT_ID}"
+      GCP_REGION: asia-northeast1
+      GOOGLE_APPLICATION_CREDENTIALS: /key.json
+volumes:
+  app:
+  modules:
